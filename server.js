@@ -11,6 +11,8 @@ const fccTestingRoutes  = require('./routes/fcctesting.js');
 const runner            = require('./test-runner');
 
 let app = express();
+app.set('view engine', 'pug');
+app.set('views', './views');
 
 app.use('/public', express.static(process.cwd() + '/public'));
 
@@ -22,7 +24,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //Index page (static HTML)
 app.route('/')
   .get(function (req, res) {
-    res.sendFile(process.cwd() + '/views/index.html');
+    res.render('index');
   });
 
 //For FCC testing purposes

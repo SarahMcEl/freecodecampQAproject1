@@ -1,0 +1,82 @@
+doctype html
+html
+  head
+    title Metric/Imperial Converter
+    meta(
+      content="An example of the Free Code Camp Metric/Imperial Converter Project"
+      name="description"
+      )
+    link#favicon(
+      type="image/x-icon"
+      href="https://cdn.freecodecamp.org/universal/favicons/favicon-32x32.png"
+      rel="icon"
+      )
+    meta(charset="utf-8")
+    meta(
+      content="IE=edge"
+      http-equiv="X-UA-Compatible"
+      )
+    meta(
+      content="width=device-width, initial-scale=1"
+      name="viewport"
+      )
+    link(
+      href="./public/style.css"
+      rel="stylesheet"
+      )
+  body
+    header
+      h1 Metric/Imperial Converter
+    hr(style="margin: 50px")
+    section
+      h3 Example usage
+      code /api/convert?input=4gal
+      br
+      code /api/convert?input=1/2km
+      br
+      code /api/convert?input=5.4/3lbs
+      br
+      code /api/convert?input=kg
+      br
+      h3 Example return
+      code
+        | { initNum: 3.1, initUnit: 'mi', returnNum: 4.98895, returnUnit: 'km', string: '3.1 miles converts to 4.98895 kilometers' }
+    hr(style="margin: 50px")
+    section
+      #testui
+        h3(style="text-align: left") Front-End
+        form#convertForm.border
+          div
+            input#convertField(
+              style="width: 200px"
+              placeholder="3.1mi"
+              name="inputData"
+              type="text"
+            )
+            input#convert(
+              value="Convert!"
+              type="submit"
+            )
+        p#result
+        code#jsonResult
+    // Your web-app is https, so your scripts need to be too
+    script(
+      crossorigin="anonymous"
+      integrity="sha256-gvQgAFzTH6trSrAWoH1iPo9Xc96QxSZ3feW6kem+O00="
+      src="https://code.jquery.com/jquery-2.2.1.min.js"
+      )
+    script.
+      $(function() {
+        $('#convertForm').submit(function(event) {
+        event.preventDefault();
+        $.ajax({
+          url: '/api/convert',
+          type: 'get',
+          data: $('#convertField').serialize(),
+          success: function(data) {
+            $('#result').text(data['result']);
+            $('#jsonResult').text(JSON.stringify(data['print']));
+          }
+        });
+        });
+      });
