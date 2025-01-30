@@ -1,10 +1,36 @@
 function ConvertHandler() {
 
+  function countForwardSlashes(str) {
+    let count = 0;
+    for (let char of str) {
+      if (char === '/') {
+        count++;
+      }
+    }
+    return count;
+  }
+
+  function countDots(str) {
+    let count = 0;
+    for (let char of str) {
+      if (char === '.') {
+        count++;
+      }
+    }
+    return count;
+  }
+
   this.getNum = function(input) {
-    const numRegex = new RegExp('[0-9]+[.]?[0-9]?\/?[0-9]?[.]?[0-9]?');
-    const regexTest = new RegExp('[0-9]+[.]?[0-9]?\/?[0-9]?[.]?[0-9]?[a-zA-Z]+');
-    if (regexTest.test(input)) {
-      return Number(numRegex.exec(input));;
+    const numRegex = new RegExp('[0-9]+[.]?[0-9]*\\/?[0-9]*[.]?[0-9]*');
+    const regexTest = new RegExp('[0-9]+[.]?[0-9]*\\/?[0-9]*[.]?[0-9]*[a-zA-Z]+');
+
+    if (regexTest.exec(input) == input) {
+      let num = numRegex.exec(input);
+      if (num.toString().indexOf('/') !== -1) {
+        let parts = num.toString().split('/');
+        return Number(parts[0]/parts[1]);
+      }
+      return num;
     } else {
       let result = numRegex.exec(input);
       if (result == null) {
@@ -16,8 +42,11 @@ function ConvertHandler() {
 
   this.getUnit = function(input) {
     const unitRegex = new RegExp('[a-zA-Z]+');
-    let result = unitRegex.exec(input).toString();
-    return result.toLowerCase();
+    let result = unitRegex.exec(input).toString().toLowerCase();
+    if(result == 'l' || result == 'gal' || result == 'km' || result == 'mi' || result =='lbs' || result =='kg'){
+      return result;
+    }
+    return 'invalid number and unit';
   };
 
   this.getReturnUnit = function(initUnit) {
