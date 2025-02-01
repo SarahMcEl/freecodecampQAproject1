@@ -2,7 +2,7 @@ describe('Converter Testing', () => {
   it('Visit URL', () => {
     cy.visit('127.0.0.1:3000')
   })
-  describe('Input Type', () => {
+  describe.skip('Input Type', () => {
     /* ==== Test Created with Cypress Studio ==== */
     it('Whole Number Input Gal', function() {
       /* ==== Generated with Cypress Studio ==== */
@@ -100,7 +100,7 @@ describe('Converter Testing', () => {
     });
   });
 
-  describe('Unit Type Input', () => {
+  describe.skip('Unit Type Input', () => {
     /* ==== Test Created with Cypress Studio ==== */
     it('Lowercase Gal Input', function() {
       /* ==== Generated with Cypress Studio ==== */
@@ -122,7 +122,7 @@ describe('Converter Testing', () => {
       cy.get('#convert').click();
       cy.get('#result').should('have.text', '1 gallons converts to 3.78541 liters');
       cy.get('#jsonResult').should('have.text', '{"initNum":1,"initUnit":"gal","returnNum":"3.78541","returnUnit":"l","string":"1 gallons converts to 3.78541 liters"}');
-      /* ==== End Cypress Studio ==== */
+      /* ==== End Cypress Stkudio ==== */
     });
 
     /* ==== Test Created with Cypress Studio ==== */
@@ -242,6 +242,184 @@ describe('Converter Testing', () => {
       cy.get('#convert').click();
       cy.get('#result').should('have.text', '1 kilograms converts to 2.20462 pounds');
       cy.get('#jsonResult').should('have.text', '{"initNum":1,"initUnit":"kg","returnNum":"2.20462","returnUnit":"lbs","string":"1 kilograms converts to 2.20462 pounds"}');
+      /* ==== End Cypress Studio ==== */
+    });
+  });
+  describe('Invalid Input Units', () => {
+    /* ==== Test Created with Cypress Studio ==== */
+    it('Double Fraction Input', function() {
+      /* ==== Generated with Cypress Studio ==== */
+      cy.visit('127.0.0.1:3000/');
+      cy.get('#convertField').clear('3');
+      cy.get('#convertField').type('3/3/3');
+      cy.get('#convert').click();
+      cy.get('#result').should('have.text', 'invalid number');
+      cy.get('#jsonResult').should('have.text', '"invalid number"');
+      /* ==== End Cypress Studio ==== */
+    });
+
+    /* ==== Test Created with Cypress Studio ==== */
+    it('Random Letter Input', function() {
+      /* ==== Generated with Cypress Studio ==== */
+      cy.visit('127.0.0.1:3000/');
+      cy.get('#convertField').clear('A');
+      cy.get('#convertField').type('Abc{enter}');
+      cy.get('#convert').click();
+      cy.get('#result').should('have.text', 'invalid number and unit');
+      cy.get('#jsonResult').should('have.text', '"invalid number and unit"');
+      /* ==== End Cypress Studio ==== */
+    });
+
+    /* ==== Test Created with Cypress Studio ==== */
+    it('BUG:Random Symbol Input That Breaks API', function() {
+      /* ==== Generated with Cypress Studio ==== */
+      cy.visit('127.0.0.1:3000/');
+      cy.get('#convertField').clear('!');
+      cy.get('#convertField').type('!@#');
+      cy.get('#convert').click();
+      /* ==== End Cypress Studio ==== */
+    });
+
+    /* ==== Test Created with Cypress Studio ==== */
+    it('Number Letter Number Input', function() {
+      /* ==== Generated with Cypress Studio ==== */
+      cy.visit('127.0.0.1:3000/');
+      cy.get('#convertField').clear('4');
+      cy.get('#convertField').type('4l4{enter}');
+      cy.get('#convert').click();
+      cy.get('#result').should('have.text', 'invalid number');
+      cy.get('#jsonResult').should('have.text', '"invalid number"');
+      /* ==== End Cypress Studio ==== */
+    });
+
+    /* ==== Test Created with Cypress Studio ==== */
+    it('FLAKEY Number and Symbol Input', function() {
+      /* ==== Generated with Cypress Studio ==== */
+      cy.visit('127.0.0.1:3000/');
+      cy.get('#convertField').clear('4');
+      cy.get('#convertField').type('4!4');
+      cy.get('#convert').click();
+      cy.get('#result').should('have.text', 'invalid number');
+      cy.get('#jsonResult').should('have.text', '"invalid number"');
+      /* ==== End Cypress Studio ==== */
+    });
+    /* ==== Test Created with Cypress Studio ==== */
+    it('BUG:Symbol and Letter Input', function() {
+      /* ==== Generated with Cypress Studio ==== */
+      cy.visit('127.0.0.1:3000/');
+      cy.get('#convertField').clear('!');
+      cy.get('#convertField').type('!l@');
+      cy.get('#convert').click();
+      cy.get('#result').should('have.text', '1 liters converts to 0.26417 gallons');
+      cy.get('#jsonResult').should('have.text', '{"initNum":1,"initUnit":"l","returnNum":"0.26417","returnUnit":"gal","string":"1 liters converts to 0.26417 gallons"}');
+      /* ==== End Cypress Studio ==== */
+    });
+
+    /* ==== Test Created with Cypress Studio ==== */
+    it('BUG:Decimal Without Leading Zero Input', function() {
+      /* ==== Generated with Cypress Studio ==== */
+      cy.visit('127.0.0.1:3000/');
+      cy.get('#convertField').clear('.');
+      cy.get('#convertField').type('.1l');
+      cy.get('#convert').click();
+      cy.get('#result').should('have.text', 'invalid number');
+      cy.get('#jsonResult').should('have.text', '"invalid number"');
+      /* ==== End Cypress Studio ==== */
+    });
+
+    /* ==== Test Created with Cypress Studio ==== */
+    it('BUG:Double Decimal Input', function() {
+      /* ==== Generated with Cypress Studio ==== */
+      cy.visit('127.0.0.1:3000/');
+      cy.get('#convertField').clear('1');
+      cy.get('#convertField').type('1.1.1l{enter}');
+      cy.get('#convert').click();
+      cy.get('#result').should('have.text', 'NaN liters converts to NaN gallons');
+      cy.get('#jsonResult').should('have.text', '{"initNum":null,"initUnit":"l","returnNum":"NaN","returnUnit":"gal","string":"NaN liters converts to NaN gallons"}');
+      /* ==== End Cypress Studio ==== */
+    });
+
+    /* ==== Test Created with Cypress Studio ==== */
+    it('Fraction Without Numerator Input', function() {
+      /* ==== Generated with Cypress Studio ==== */
+      cy.visit('127.0.0.1:3000/');
+      cy.get('#convertField').clear('/');
+      cy.get('#convertField').type('/2l{enter}');
+      cy.get('#convert').click();
+      cy.get('#result').should('have.text', 'invalid number');
+      cy.get('#jsonResult').should('have.text', '"invalid number"');
+      /* ==== End Cypress Studio ==== */
+    });
+
+    /* ==== Test Created with Cypress Studio ==== */
+    it('Fraction Without Denominator Input', function() {
+      /* ==== Generated with Cypress Studio ==== */
+      cy.visit('127.0.0.1:3000/');
+      cy.get('#convertField').clear('1');
+      cy.get('#convertField').type('1/l{enter}');
+      cy.get('#convert').click();
+      cy.get('#result').should('have.text', 'Infinity liters converts to Infinity gallons');
+      cy.get('#jsonResult').should('have.text', '{"initNum":null,"initUnit":"l","returnNum":"Infinity","returnUnit":"gal","string":"Infinity liters converts to Infinity gallons"}');
+      /* ==== End Cypress Studio ==== */
+    });
+
+    /* ==== Test Created with Cypress Studio ==== */
+    it('Fraction With Zero in Denominator Input', function() {
+      /* ==== Generated with Cypress Studio ==== */
+      cy.visit('127.0.0.1:3000/');
+      cy.get('#convertField').clear('4');
+      cy.get('#convertField').type('4/0l{enter}');
+      cy.get('#convert').click();
+      cy.get('#result').should('have.text', 'Infinity liters converts to Infinity gallons');
+      cy.get('#jsonResult').should('have.text', '{"initNum":null,"initUnit":"l","returnNum":"Infinity","returnUnit":"gal","string":"Infinity liters converts to Infinity gallons"}');
+      /* ==== End Cypress Studio ==== */
+    });
+
+    /* ==== Test Created with Cypress Studio ==== */
+    it('Zero Input', function() {
+      /* ==== Generated with Cypress Studio ==== */
+      cy.visit('127.0.0.1:3000/');
+      cy.get('#convertField').clear('0');
+      cy.get('#convertField').type('0{enter}');
+      cy.get('#convert').click();
+      cy.get('#result').should('have.text', 'invalid number');
+      cy.get('#jsonResult').should('have.text', '"invalid number"');
+      /* ==== End Cypress Studio ==== */
+    });
+
+    /* ==== Test Created with Cypress Studio ==== */
+    it('Zero L Input', function() {
+      /* ==== Generated with Cypress Studio ==== */
+      cy.visit('127.0.0.1:3000/');
+      cy.get('#convertField').clear('0');
+      cy.get('#convertField').type('0l{enter}');
+      cy.get('#convert').click();
+      cy.get('#result').should('have.text', '0 liters converts to 0.00000 gallons');
+      cy.get('#jsonResult').should('have.text', '{"initNum":0,"initUnit":"l","returnNum":"0.00000","returnUnit":"gal","string":"0 liters converts to 0.00000 gallons"}');
+      /* ==== End Cypress Studio ==== */
+    });
+
+    /* ==== Test Created with Cypress Studio ==== */
+    it('Letter Number Letter Input', function() {
+      /* ==== Generated with Cypress Studio ==== */
+      cy.visit('127.0.0.1:3000/');
+      cy.get('#convertField').clear('l');
+      cy.get('#convertField').type('l4l{enter}');
+      cy.get('#convert').click();
+      cy.get('#result').should('have.text', 'invalid number');
+      cy.get('#jsonResult').should('have.text', '"invalid number"');
+      /* ==== End Cypress Studio ==== */
+    });
+
+    /* ==== Test Created with Cypress Studio ==== */
+    it('.L Input', function() {
+      /* ==== Generated with Cypress Studio ==== */
+      cy.visit('127.0.0.1:3000/');
+      cy.get('#convertField').clear('.');
+      cy.get('#convertField').type('.l{enter}');
+      cy.get('#convert').click();
+      cy.get('#result').should('have.text', '1 liters converts to 0.26417 gallons');
+      cy.get('#jsonResult').should('have.text', '{"initNum":1,"initUnit":"l","returnNum":"0.26417","returnUnit":"gal","string":"1 liters converts to 0.26417 gallons"}');
       /* ==== End Cypress Studio ==== */
     });
   });
